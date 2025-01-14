@@ -1,0 +1,26 @@
+---
+import AmazonLogo from './AmazonLogo.astro';
+
+const CHILE = 'ES';
+
+// La línea 7 configura Vercel para manejar la función de servidor,
+// permitiendo que la aplicación se ejecute en la plataforma de Vercel.
+const country = Astro.request.headers.get('X-Vercel-IP-Country') ?? 'ES';
+
+const storeCountry = country === CHILE ? 'chile' : 'arg';
+const countryName = country === CHILE ? 'Chile' : 'Argentina';
+
+const { buy } = Astro.props;
+const url = buy[storeCountry];
+---
+
+<a
+    href={url}
+    title="Buy Book"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="text-balance inline-flex gap-2 items-center bg-yellow-400 hover:bg-yellow-500 active:bg-yellow-600 text-black font-bold py-2 px-4 rounded-lg border border-yellow-500 transition duration-200 ease-in-out hover:scale-105 justify-center text-center"
+>
+    Buy on Amazon {countryName}
+    <AmazonLogo />
+</a>

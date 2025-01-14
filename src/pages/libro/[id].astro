@@ -1,0 +1,68 @@
+---
+import { getCollection, render } from 'astro:content';
+import { SHOW_BUY_BUTTON } from "astro:env/server";
+import Layout from '../../layouts/Layout.astro';
+import BookScore from '../../components/BookScore.astro';
+import BuyButton from "../../components/BuyButton.astro";
+import logo from '../../../public/logo-dev.webp';
+import { Image } from 'astro:assets';
+
+export async function getStaticPaths() {
+    const books = await getCollection('books');
+
+    return books.map(book => {
+        return {
+            params: { id: book.slug },
+            props: { book },
+        };
+    });
+}
+
+const { book } = Astro.props;
+
+const { data, slug } = book;
+const { title, author, img, readtime, description, buy } = data;
+const { Content } = await render(book);
+---
+
+<Layout title={title}>
+    <article class="flex flex-col items-center gap-8">
+        <h1>
+            <Image src={logo} alt={'logo'} class="size-32 object-contain" />
+        </h1>
+        <div class="flex gap-12">
+            <aside class="flex flex-col items-center gap-4">
+                <img
+                    transition:name={`img-${slug}`}
+                    class="rounded w-72 h-[40vh] object-cover"
+                    src={`/${img}`}
+                    alt={title}
+                />
+
+                <!-- server:defer le dices a astro que este componente se va a trabajar en el servidor, ya que la informacion que contiene es dinamica -->
+                <BookScore server:defer id={slug}>
+                    <span slot="fallback" class="text-xs opacity-70"
+                        >Loading score...</span
+                    >
+                </BookScore>
+
+                {SHOW_BUY_BUTTON && <BuyButton server:defer buy={buy} />}
+            </aside>
+
+            <main class="max-w-3xl">
+                <a href="/" class="hover:underline opacity-70">
+                    ← Go back
+                </a>
+                <h1
+                    transition:name={`title-${slug}`}
+                    class="text-4xl font-bold mb-4 mt-2"
+                >
+                    {title}
+                </h1>
+                <div class="prose prose-invert">
+                    <Content />
+                </div>
+            </main>
+        </div>
+    </article></Layout
+>
