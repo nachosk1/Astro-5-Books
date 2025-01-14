@@ -1,9 +1,9 @@
 ---
 import { getCollection, render } from 'astro:content';
-import { SHOW_BUY_BUTTON } from "astro:env/server";
+import { SHOW_BUY_BUTTON } from 'astro:env/server';
 import Layout from '../../layouts/Layout.astro';
 import BookScore from '../../components/BookScore.astro';
-import BuyButton from "../../components/BuyButton.astro";
+import BuyButton from '../../components/BuyButton.astro';
 import logo from '../../../public/logo-dev.webp';
 import { Image } from 'astro:assets';
 
@@ -23,6 +23,7 @@ const { book } = Astro.props;
 const { data, slug } = book;
 const { title, author, img, readtime, description, buy } = data;
 const { Content } = await render(book);
+export const prerender = true;
 ---
 
 <Layout title={title}>
@@ -50,9 +51,7 @@ const { Content } = await render(book);
             </aside>
 
             <main class="max-w-3xl">
-                <a href="/" class="hover:underline opacity-70">
-                    ← Go back
-                </a>
+                <a href="/" class="hover:underline opacity-70"> ← Go back </a>
                 <h1
                     transition:name={`title-${slug}`}
                     class="text-4xl font-bold mb-4 mt-2"
@@ -64,5 +63,5 @@ const { Content } = await render(book);
                 </div>
             </main>
         </div>
-    </article></Layout
->
+    </article>
+</Layout>
