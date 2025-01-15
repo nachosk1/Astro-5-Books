@@ -1,11 +1,12 @@
 ---
+import { geolocation } from '@vercel/functions';
 import AmazonLogo from './AmazonLogo.astro';
 
-const CHILE = 'ES';
+const CHILE = 'CL';
 
 // La línea 7 configura Vercel para manejar la función de servidor,
 // permitiendo que la aplicación se ejecute en la plataforma de Vercel.
-const country = Astro.request.headers.get('X-Vercel-IP-Country') ?? 'ES';
+const { country } = geolocation(Astro.request);
 
 const storeCountry = country === CHILE ? 'chile' : 'arg';
 const countryName = country === CHILE ? 'Chile' : 'Argentina';
